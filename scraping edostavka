@@ -1,0 +1,48 @@
+import requests
+from bs4 import BeautifulSoup
+
+header = {'user-agent': 'random_people'}
+
+# ссылки для примера
+link = 'https://edostavka.by/category/5138' #  Овощи и фрукты
+link = 'https://edostavka.by/category/5194' # Молоко, яйца
+link = 'https://edostavka.by/category/5329?lc=2' # Хлеб, выпечка
+link = 'https://edostavka.by/category/5309?lc=4' # напитки
+
+responce = requests.get(link, headers=header).text
+block = BeautifulSoup(responce, 'lxml')
+
+# главный блок со всеми товарами
+products_block = block.find('div', class_='products_products__0J3Sy')
+
+# все товары
+product = products_block.find_all('div', class_="adult-wrapper_adult__eCCJW vertical_product__Q8mUI")
+
+# счетчик для сохранения фото
+count_photo = 0
+
+for i in product:
+    # нахождение картинок товара
+    image_products = i.find('span', class_="card-image_adult__gbuJW").find('img', class_="card-image_image__a8P4T vertical_image__Dsd8F").get('src')
+    get_photo = requests.get(image_products).content
+
+    # скачивание товара, создайте папку image_evr
+    with open(fr'image_evr\tov{count_photo}.jpg', 'wb') as file:
+        file.write(get_photo)
+
+    # прибавление к счетчику фоток
+    count_photo += 1
+
+for i in product:
+    # пробегаемся по всем продуктам и ищем название с ценой
+    with open('about_evro.txt', 'a') as file:
+        # берется название товара
+        name_product = i.find('a', class_='vertical_title__9_9cV').text.replace('­', '')
+
+        # берется цена, но у некоторых 2-е цены, первая со скидкой а вторая без скидки
+        price_product = i.find('div', class_='price_price__rZA93 vertical_price__OM5kg').text.split('.')[0] + '.'
+        file.write(f"Продукт: {name_product}\nЦена: {price_product}\n\n") # запись в файл
+
+        print(i.find('a', class_='vertical_title__9_9cV').text.replace('­', '')) # - если захотите чтобы в консоли выводились товары
+
+print('PROGRAMM end')
