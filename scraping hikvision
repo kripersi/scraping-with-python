@@ -1,0 +1,89 @@
+import requests
+
+def scraping_cameras():
+    cookies = {
+        'PHPSESSID': 'k0n6hudu169mgdg0rpddva9ta0',
+        '_ym_uid': '1701449618489358782',
+        '_ym_d': '1701449618',
+        '_ym_isad': '2',
+        '_ym_visorc': 'w',
+    }
+
+    headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'ru,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        # 'Cookie': 'PHPSESSID=k0n6hudu169mgdg0rpddva9ta0; _ym_uid=1701449618489358782; _ym_d=1701449618; _ym_isad=2; _ym_visorc=w',
+        'Origin': 'https://hikvision.ru',
+        'Referer': 'https://hikvision.ru/products/selection?c-camera',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '"Microsoft Edge";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+    }
+
+    data = {
+        'group': '1',
+    }
+
+    response_camera = requests.post('https://hikvision.ru/api/product/selection', cookies=cookies,
+                             headers=headers,
+                             data=data).json()['product']
+
+    for i in response_camera:
+        print(f"id: {i['id']}\n"
+              f"model: {i['model']}\n"
+              f"shortinfo: {i['shortinfo']}\n"
+              f"{'-' * 15}")
+
+
+def scraping_registrators():
+    cookies = {
+        'PHPSESSID': 'k0n6hudu169mgdg0rpddva9ta0',
+        '_ym_uid': '1701449618489358782',
+        '_ym_d': '1701449618',
+        '_ym_isad': '2',
+        '_ym_visorc': 'w',
+    }
+
+    headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'ru,en;q=0.9,en-GB;q=0.8,en-US;q=0.7',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        # 'Cookie': 'PHPSESSID=k0n6hudu169mgdg0rpddva9ta0; _ym_uid=1701449618489358782; _ym_d=1701449618; _ym_isad=2; _ym_visorc=w',
+        'Origin': 'https://hikvision.ru',
+        'Referer': 'https://hikvision.ru/products/selection?',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '"Microsoft Edge";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+    }
+
+    data = {
+        'group': '2',
+    }
+
+    response_registrator = requests.post('https://hikvision.ru/api/product/selection',
+                             cookies=cookies,
+                             headers=headers,
+                             data=data).json()['product']
+
+
+    for i in response_registrator:
+        print(f"id: {i['id']}\n"
+              f"model: {i['model']}\n"
+              f"shortinfo: {i['shortinfo']}\n"
+              f"{'-' * 15}")
+
+
+scraping_registrators()
